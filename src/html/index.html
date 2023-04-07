@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Weather</title>
+    <link rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+    
+<div class="page">
+    <div class="weather-container">
+        <form class="city-search-form" action="" id="search-form">
+            <input class="city-search-form__input" type="text" name="" placeholder="Search for a city" id="city-search">
+            
+            <button class="city-search-form__button">search</button>
+        </form>
+
+
+        <div class="weather-main">
+            <h2 class="weather-main__city-name" id="city-name">Pskov</h2>
+            <!-- <p class="weather-main__date" id="date">04.04.2023</p> -->
+            <div class="weather-main__preview">
+                <img src="images/svg-animated/clear-sky.svg" alt="weather icon" class="weather-main__preview-icon" id="weather-icon">
+                <div class="weather-main__preview-element">
+                    <p class="weather-main__preview-element-temp" id="temperature">-1</p>
+                    <p class="weather-main__preview-element-weather" id="weather-description">Sunny</p>
+                </div> <!--weather-main__preview-element-->
+            </div> <!--weather-main__preview-->
+        </div> <!--weather-main-->
+    </div> <!--weather-container-->
+</div> <!--page-->
+    
+
+    <script src="js/script.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px;
+    color: #fff
+
+}
+
+.page {
+    height: 100vh;
+    padding-top: 100px;
+
+    background: #8573c7;
+    // background: -webkit-linear-gradient(135deg, #3c1053, #ad5389);
+    // background: linear-gradient(135deg, #8f3069,
+    // #240b36);
+}
+
+.weather-container {
+    width: fit-content;
+    min-width: 450px;
+    margin: 0 auto;
+    padding: 30px;
+
+    background-color: rgba($color: #2b1841, $alpha: 0.8);
+    border: 2px solid #ffffff;
+    border-radius: 16px;
+
+    box-shadow: 0px 0px 25px 10px rgba(0, 0, 0, 0.3);
+}
+
+.city-search-form {
+    display: flex;   
+    overflow: hidden; 
+    margin-bottom: 1.5rem;
+
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+.city-search-form__input {
+    width: 100%;
+
+    padding: 8px 20px;
+
+    color: #ffffff;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+
+    background-color: rgba($color: #000000, $alpha: 0.0);
+    border: none;
+    // border: 1px solid #fff;
+    // border-radius: 5px;
+}
+
+.city-search-form__button {
+    padding: 0 20px;
+
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+
+    border: none;
+    background-color: #fff;
+
+    transition: color linear .1s, background-color linear .1s;
+
+    &:hover{
+        cursor: pointer;
+
+        color: #fff;
+        background-color: #63539b;
+    }
+}
+
+// .weather-main {
+// }
+
+.weather-main__city-name {
+    margin-bottom: 0.5rem;
+
+    font-weight: 500;
+    font-size: 2.7rem;
+}
+
+.weather-main__date {
+    font-weight: 300;
+    font-size: 1.3rem;
+}
+
+.weather-main__preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 3rem 1rem 1rem;
+}
+
+.weather-main__preview-icon {
+    height: 150px;
+    width: auto;
+}
+
+.weather-main__preview-element {
+    text-align: center;
+}
+
+.weather-main__preview-element-temp {
+    font-size: 4.5rem;
+    font-weight: 400;
+
+    &::after {
+        content: '\00B0';
+    }
+}
+
+.weather-main__preview-element-weather {
+    font-weight: 300;
+    font-size: 1.6rem;
+}
