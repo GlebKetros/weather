@@ -1,6 +1,4 @@
-// получаем географические координаты городо по его названию 
-// для этого воспольльзуемся API геокодирования
-const urlGeo = 'http://api.openweathermap.org/geo/1.0/direct'
+const urlGeo = 'https://api.openweathermap.org/geo/1.0/direct'
 const urlWeather = `https://api.openweathermap.org/data/2.5/weather`
 const key = 'b8c763881bde95df3bc652f6049e4738'
 const svgPath = 'images/svg-animated/'
@@ -15,6 +13,7 @@ const weatherIcons = [
     {key: 'broken clouds', iconName: 'cloudy.svg', weather: 'Cloudy'},
     {key: 'overcast clouds', iconName: 'cloudy.svg', weather: 'Cloudy'},
     {key: 'shower rain', iconName: 'rainy.svg', weather: 'Rainy'},
+    {key: 'moderate rain', iconName: 'rainy.svg', weather: 'Rainy'},
     {key: 'light rain', iconName: 'rainy.svg', weather: 'Rainy'},
     {key: 'rain', iconName: 'rainy.svg', weather: 'Rainy'},
     {key: 'thunderstorm', iconName: 'thundery.svg', weather: 'Thundery'},
@@ -43,70 +42,96 @@ const addZeroPrepend = (num) => {
     }
 }
 
+function renderHumidityScale (value) {
+    const scale = document.getElementById('humidityScaleMain')
+
+    scale.style.strokeDashoffset = 189 / 100 * (100 - value) + 94
+}
+
+//фенкция скрывает лоадер, если он виден и делает видимым, если скрыт
+function toggleLoader() {
+    const preloader = document.querySelector('#preloader')
+    if (getComputedStyle(preloader).display === 'none') {
+        preloader.style.display = 'flex'
+    } else {
+        preloader.style.display = 'none'
+    }
+}
 
 // функция принимает название города и возвращает объект с координатами города
-const getCoordinates = function(city) {
-    
-    return new Promise((resolve, reject) => {
-        let result = {}
-        fetch(`${urlGeo}?q=${city}&appid=${key}`)
-            .then(res => res.json())
-            .then(data => {
-                result.city = data[0].local_names.en                
-                result.lat = data[0].lat
-                result.lon = data[0].lon
+async function getCoordinates (city) {
+    let result = {}
 
-                resolve(result) 
-            })
-            .catch(err => {
-                console.log(err)
-                alert('city not found')
-            })
-    }).then(result => result)
+    try {
+        const res = await fetch(`${urlGeo}?q=${city}&appid=${key}`)
+        const data = await res.json()
+        await (function() {
+            if (data.length == 0) {
+                alert('City not found')
+            }
+        })()
+
+        result.city = await data[0].local_names.en                
+        result.lat = await data[0].lat
+        result.lon = await data[0].lon         
+    } catch(e) {
+        throw e
+    }
+
+    return result
 }
 
 // функция возвращает объект с данными о погоде в городе, координаты которого были в нее переданы
-const getWeather = function(lat, lon) {
-    let result = {
-    }
-    return new Promise((resolve, reject) => {
-        fetch(`${urlWeather}?lat=${lat}&lon=${lon}&appid=${key}`)
-            .then(res => res.json())
-            .then(res => {
-                result.city = res.name
-                result.temperature = Math.round(res.main.temp - 273.15)
-                result.weatherDescription = res.weather[0].description
+async function getWeather (lat, lon) {
+    let result = {}
 
-                resolve(result) 
-            })
-    })
+    try {
+    const res = await fetch(`${urlWeather}?lat=${lat}&lon=${lon}&appid=${key}`)
+    const data = await res.json()
+
+    result.city = await data.name
+    result.temperature = await Math.round(data.main.temp - 273.15)
+    result.feelsLike = await Math.round(data.main.feels_like - 273.15)
+    result.pressure = await data.main.pressure
+    result.weatherDescription = await data.weather[0].description
+    result.humidity = await data.main.humidity        
+    } catch(e) {
+        throw e
+    }
+
+    return result
 }
 
 // функция принимает данные о погоде в городе и на их основе перерисовывает страницу
 const renderWeatherInfo = function(weather) {
-    const cityName = document.getElementById('city-name')
-    const weatherIcon = document.getElementById('weather-icon')
-    const temperature = document.getElementById('temperature')
-    const weatherDescription = document.getElementById('weather-description')
+    document.getElementById('city-name').innerText = `${weather.city}`
+    document.getElementById('weather-icon').src = `${svgPath}${getWeatherIcon(weather.weatherDescription)}`
+    document.getElementById('temperature').innerText = weather.temperature
+    document.getElementById('weather-description').innerText = getWeatherDescriptionByKey(weather.weatherDescription) 
+    
+    document.getElementById('humidity').innerText = weather.humidity
+    document.getElementById('feelsLike').innerText = weather.feelsLike 
+    document.getElementById('pressure').innerText = weather.pressure
 
-    cityName.innerText = weather.city
-    weatherIcon.src = `${svgPath}${getWeatherIcon(weather.weatherDescription)}`
-    temperature.innerText = weather.temperature
-    weatherDescription.innerText = getWeatherDescriptionByKey(weather.weatherDescription) 
+    renderHumidityScale(weather.humidity)
 }
 
-const printWeatherByCity = function(city) {
-    getCoordinates(city)
-        .then(cityInfo => {
-            return getWeather(cityInfo.lat, cityInfo.lon)
-        })
-        .then(weather => {
-            renderWeatherInfo(weather)
-        })   
+
+async function printWeatherByCity(city) {
+    toggleLoader()
+
+    try {
+        const cityInfo = await getCoordinates(city)
+        const weather = await getWeather(cityInfo.lat, cityInfo.lon)
+        renderWeatherInfo(weather)        
+    } catch(e) {
+        console.log(e)
+    } finally {
+        toggleLoader()
+    }
 } 
 
 printWeatherByCity('pskov')
-
 
 searchForm.addEventListener('submit', (event) => {
     event.preventDefault()
@@ -114,42 +139,4 @@ searchForm.addEventListener('submit', (event) => {
     printWeatherByCity(citySearch.value)
     citySearch.value = ''
 })
-// const render = new Promise((resolve, rejected) => {
-//     getCoordinates()
-// })
 
-// render.then(console.log('suc'))
-
-
-// const getCoordinates = (city) => {
-//     let result = {}
-//     fetch(`${urlGeo}?q=${city}&appid=${key}`)
-//         .then(res => res.json())
-//         .then(data => {
-//             result.lat = data[0].lat
-//             result.lon = data[0].lon
-//             result.city = data[0].local_names.en
-//         })
-//         .catch(err => console.log(err))
-
-//         console.log(result)
-//     return result
-// }
-
-
-
-// const response = {
-//     city: 'pskov',
-//     lat: 57.8173923,
-//     lon: 28.3343465,
-// }
-// console.log(response)
-// console.log(response.lat)
-
-// const url = `https://api.openweathermap.org/data/2.5/weather?lat=57.8173923&lon=28.3343465&appid=${key}`
-
-// fetch(url)
-//     .then(res => res.json())
-//     .then(data => console.log(data))
-
-// let geo = 'http://api.openweathermap.org/geo/1.0/direct?q=Moskow&appid=b8c763881bde95df3bc652f6049e4738'

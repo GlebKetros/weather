@@ -9,30 +9,20 @@ const rename = require('gulp-rename')
 
 function html() {
     return src('./src/html/*.html')
-        .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(dest('./dist'))
         .pipe(browserSync.stream())
 }
 
 function scss() {
     return src('src/scss/*.scss')
-        .pipe(sass({outputStyle: 'compressed'}))
-        .pipe(rename({
-            suffix: '.min',
-            extname: '.css'
-        }))
+        .pipe(sass())
         .pipe(dest('./dist/css'))
         .pipe(browserSync.stream())
 }
 
 function script() {
-    return src('./src/js/**.js', {sourcemaps: true})
-        .pipe(rename({
-            suffix: '.min',
-            extname: '.js'
-        }))
-        .pipe(uglify())
-        .pipe(dest('./dist/js', {sourcemaps: '.'}))
+    return src('./src/js/**.js')
+        .pipe(dest('./dist/js'))
         .pipe(browserSync.stream())
 }
 

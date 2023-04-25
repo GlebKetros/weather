@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
     <title>Weather</title>
-    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     
@@ -18,22 +18,69 @@
             <button class="city-search-form__button">search</button>
         </form>
 
+        <div class="weather-body">
+            <div class="weather-main">
+                <h2 class="weather-main__city-name" id="city-name">Pskov</h2>
+                <!-- <p class="weather-main__date" id="date">04.04.2023</p> -->
+                <div class="weather-main__preview">
+                    <img src="images/svg-animated/clear-sky.svg" alt="weather icon" class="weather-main__preview-icon" id="weather-icon">
+                    <div class="weather-main__preview-element">
+                        <p class="weather-main__preview-element-temp" id="temperature">-1</p>
+                        <p class="weather-main__preview-element-weather" id="weather-description">Sunny</p>
+                    </div> <!--weather-main__preview-element-->
+                </div> <!--weather-main__preview-->
+            </div> <!--weather-main-->
 
-        <div class="weather-main">
-            <h2 class="weather-main__city-name" id="city-name">Pskov</h2>
-            <!-- <p class="weather-main__date" id="date">04.04.2023</p> -->
-            <div class="weather-main__preview">
-                <img src="images/svg-animated/clear-sky.svg" alt="weather icon" class="weather-main__preview-icon" id="weather-icon">
-                <div class="weather-main__preview-element">
-                    <p class="weather-main__preview-element-temp" id="temperature">-1</p>
-                    <p class="weather-main__preview-element-weather" id="weather-description">Sunny</p>
-                </div> <!--weather-main__preview-element-->
-            </div> <!--weather-main__preview-->
-        </div> <!--weather-main-->
+            <div class="comfort-level">
+                <h2 class="comfort-level__header">Comfort level</h2>
+
+                <div class="comfort-level__humidity-box">
+                    <div class="humidity-box__content">
+                        <p class="humidity-box__value" id="humidity">70</p>
+                        <p class="humidity-box__humidity">Humidity</p>
+                    </div>
+
+                    <div class="humidity-box__scale">
+                        <svg class="humidity-box__scale-bg" viewbox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" stroke-dasharray="283" id="humidityScaleBg"/>
+                        </svg>
+
+                        <svg class="humidity-box__scale-main" viewbox="0 0 100 100">
+                            <linearGradient id="scale-main-gradient" x1="100%" y1="0%" x2="0%" y2="0%">
+                                <stop offset="0%" stop-color="rgba(208,231,255, 1)"/>
+                                <stop offset="100%" stop-color="rgba(52,210,255,1)"/>
+                            </linearGradient>
+                            <circle cx="50" cy="50" r="45" stroke-dasharray="283" id="humidityScaleMain"/>
+                        </svg>
+                    </div>
+                </div> <!--comfort-level__humidity-box-->
+
+                <div class="comfort-level__comfort-flex-container">
+                    <div class="comfort-flex-container__feels-like">
+                        <p class="comfort-level__name">Feels like </p>
+                        <p class="comfort-level__value" id="feelsLike">1</p>
+                        <p class="comfort-level__unit">&#176;</p>
+                    </div>
+
+                    <div class="comfort-flex-container__pressure">
+                        <p class="comfort-level__name">Pressure </p>
+                        <p class="comfort-level__value" id="pressure">1020</p>
+                        <p class="comfort-level__unit">mbar</p>
+                    </div>
+                    
+                </div> <!--comfort-level__comfort-flex-container-->
+            </div> <!--comfort-level-->
+        </div> <!--weather-body-->
+
+        <div class="preloader" id="preloader">
+            <div class="lds-dual-ring"></div>
+            <p class="preloader__text">Loading...</p>
+        </div>        
     </div> <!--weather-container-->
 </div> <!--page-->
+
     
 
-    <script src="js/script.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
