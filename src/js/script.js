@@ -70,7 +70,7 @@ async function getCoordinates (city) {
                 alert('City not found')
             }
         })()
-
+        
         result.city = await data[0].local_names.en                
         result.lat = await data[0].lat
         result.lon = await data[0].lon         
@@ -82,14 +82,14 @@ async function getCoordinates (city) {
 }
 
 // функция возвращает объект с данными о погоде в городе, координаты которого были в нее переданы
-async function getWeather (lat, lon) {
+async function getWeather (lat, lon, city) {
     let result = {}
 
     try {
     const res = await fetch(`${urlWeather}?lat=${lat}&lon=${lon}&appid=${key}`)
     const data = await res.json()
 
-    result.city = await data.name
+    result.city = await city || data.name
     result.temperature = await Math.round(data.main.temp - 273.15)
     result.feelsLike = await Math.round(data.main.feels_like - 273.15)
     result.pressure = await data.main.pressure
@@ -122,7 +122,7 @@ async function printWeatherByCity(city) {
 
     try {
         const cityInfo = await getCoordinates(city)
-        const weather = await getWeather(cityInfo.lat, cityInfo.lon)
+        const weather = await getWeather(cityInfo.lat, cityInfo.lon, cityInfo.city)
         renderWeatherInfo(weather)        
     } catch(e) {
         console.log(e)
